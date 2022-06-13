@@ -1,4 +1,4 @@
-using System.Collections;
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
@@ -6,17 +6,50 @@ using UnityEngine.UI;
 public class GameController : MonoBehaviour
 {
     private List<ObjectVO> objetos = new List<ObjectVO>();
-    public List<Image> botoes;
+    public List<GameObject> botoes;
+    
+    public ObjectVO voAtivo;
+    public ObjectVO objetoVazio;
 
     public void inserirObjetoNaBolsa(ObjectVO objeto)
     {
         objetos.Add(objeto);
-        ChamarAnimacao(objeto);
+        ChamarAnimacao(objeto.animacao);
     }
 
-    private void ChamarAnimacao(ObjectVO objeto)
+    public void removerObjetoNaBolsa(InteracaoVO objeto)
     {
-        objeto.animacao.GetComponent<Animator>().SetTrigger("Ativar");
+        if (voAtivo == null || voAtivo.id == null)
+        {
+            return;
+        }
+        if (voAtivo.id == objeto.objetoInteracao.id)
+        {
+            objetos.Remove(objeto.objetoInteracao);
+            ChamarAnimacao(objeto.animacao);
+        }
+    }
+
+    public void desabilitarBotao(GameObject botao)
+    {
+        if (voAtivo == null)
+        {
+            return;
+        }
+        if (voAtivo.id == botao.GetComponent<InteracaoVO>().objetoInteracao.id)
+        {
+            botao.SetActive(false);
+        }
+    }
+
+    private void ChamarAnimacao(GameObject objeto)
+    {
+        objeto.GetComponent<Animator>().SetTrigger("Ativar");
+    }
+
+    public void setVoAtivo(ObjectVO objeto)
+    {
+        voAtivo = objeto;
     }
 
     public void AtualizarBotoes()
@@ -25,9 +58,12 @@ public class GameController : MonoBehaviour
         { 
             if (botoes.IndexOf(botao) >= objetos.Count)
             {
-                return;
+                botao.GetComponent<Image>().sprite = null;
+                botao.GetComponent<ObjectVO>().setVO(null);
+                continue;
             }
             botao.GetComponent<Image>().sprite = objetos[botoes.IndexOf(botao)].sprite;
+            botao.GetComponent<ObjectVO>().setVO(objetos[botoes.IndexOf(botao)]);
         }
     }
 }
