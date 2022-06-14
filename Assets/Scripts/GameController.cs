@@ -7,9 +7,12 @@ public class GameController : MonoBehaviour
 {
     private List<ObjectVO> objetos = new List<ObjectVO>();
     public List<GameObject> botoes;
+    public List<GameObject> ambientes;
     
     public ObjectVO voAtivo;
     public ObjectVO objetoVazio;
+
+    public int ambienteAtivo = 0;
 
     public void inserirObjetoNaBolsa(ObjectVO objeto)
     {
@@ -66,4 +69,55 @@ public class GameController : MonoBehaviour
             botao.GetComponent<ObjectVO>().setVO(objetos[botoes.IndexOf(botao)]);
         }
     }
+
+    public void MoverParaEsquerda()
+    {
+        ambienteAtivo--;
+        if (ambienteAtivo < 0)
+        {
+            ambienteAtivo = 3;
+        }
+
+        foreach (var ambiente in ambientes)
+        {
+            if (ambientes.IndexOf(ambiente) == ambienteAtivo)
+            {
+                ambiente.SetActive(true);
+                continue;
+            }
+            ambiente.SetActive(false);
+        }
+    }
+
+    public void MoverParaDireita()
+    {
+        ambienteAtivo++;
+        if (ambienteAtivo > 3)
+        {
+            ambienteAtivo = 0;
+        }
+
+        foreach (var ambiente in ambientes)
+        {
+            if (ambientes.IndexOf(ambiente) == ambienteAtivo)
+            {
+                ambiente.SetActive(true);
+                continue;
+            }
+            ambiente.SetActive(false);
+        }
+    }
+
+    public void Back(GameObject ambienteAtual)
+    {
+        ambientes[ambienteAtivo].SetActive(true);
+        ambienteAtual.SetActive(false);
+    }
+
+    public void Inspecionar(GameObject ambienteInspecionar)
+    {
+        ambientes[ambienteAtivo].SetActive(false);
+        ambienteInspecionar.SetActive(true);
+    }
+
 }
