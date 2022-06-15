@@ -122,4 +122,9 @@ public class GameController : MonoBehaviour
         ambienteInspecionar.SetActive(true);
     }
 
+    public void playSound(AudioSource som)
+    {
+        som.Play();
+    }
+
 }
