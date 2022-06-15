@@ -62,10 +62,12 @@ public class GameController : MonoBehaviour
             if (botoes.IndexOf(botao) >= objetos.Count)
             {
                 botao.GetComponent<Image>().sprite = null;
+                botao.GetComponent<Image>().color = new Color(1, 1, 1, 0);
                 botao.GetComponent<ObjectVO>().setVO(null);
                 continue;
             }
             botao.GetComponent<Image>().sprite = objetos[botoes.IndexOf(botao)].sprite;
+            botao.GetComponent<Image>().color = new Color(1, 1, 1, 1);
             botao.GetComponent<ObjectVO>().setVO(objetos[botoes.IndexOf(botao)]);
         }
     }
